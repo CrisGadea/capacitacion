@@ -20,8 +20,9 @@ final class CasiBuscaMinaTest extends TestCase
     public function testAgregarMina()
     {
         $buscaMina = $this->crearBuscaMina();
-        $buscaMina->agregarMina(2,3);
-        $buscaMina->jugar(2,3);
+        $this->assertTrue($buscaMina->agregarMina(2,0));
+        $buscaMina->agregarMina(2,0);
+        $buscaMina->jugar(2,0);
         $this->assertFalse($buscaMina->gano());
         $this->assertTrue($buscaMina->terminoDeJugar());
     }
@@ -29,35 +30,34 @@ final class CasiBuscaMinaTest extends TestCase
     public function testAgregarMinaRepetida()
     {
         $buscaMina = $this->crearBuscaMina();
-        $buscaMina->agregarMina(2,3);
-        $buscaMina->agregarMina(2,3);
-        $this->assertTrue($buscaMina->terminoDeJugar());
-        //Este test falla ya que no está validado en el código el hecho de agregar una mina donde ya había
+        $buscaMina->agregarMina(2,0);
+        $this->assertFalse($buscaMina->agregarMina(2,0));
     }
 
     public function testJugar()
     {
         $buscaMina = $this->crearBuscaMina();
-        $buscaMina->agregarMina(2,3);
-        $buscaMina->agregarMina(1,3);
+        $buscaMina->agregarMina(2,0);
+        $buscaMina->agregarMina(1,0);
         $buscaMina->agregarMina(2,2);
         $buscaMina->jugar(1,1);
         $this->assertFalse($buscaMina->gano());
         $this->assertFalse($buscaMina->terminoDeJugar());
-        $buscaMina->jugar(2,3);
+        $buscaMina->jugar(2,0);
         $this->assertFalse($buscaMina->gano());
         $this->assertTrue($buscaMina->terminoDeJugar());
+        $this->assertFalse($buscaMina->jugar(1,0));
     }
 
     public function testTerminoDeJugar()
     {
         $buscaMina = $this->crearBuscaMina();
         $buscaMina->agregarMina(1,1);
-        $buscaMina->agregarMina(2,3);
-        $buscaMina->agregarMina(3,3);
+        $buscaMina->agregarMina(2,0);
+        $buscaMina->agregarMina(0,0);
         $buscaMina->sacarMina(1,1);
-        $buscaMina->sacarMina(2,3);
-        $buscaMina->sacarMina(3,3);
+        $buscaMina->sacarMina(2,0);
+        $buscaMina->sacarMina(0,0);
         $this->assertTrue($buscaMina->terminoDeJugar());
         $this->assertTrue($buscaMina->gano());
 
@@ -66,8 +66,6 @@ final class CasiBuscaMinaTest extends TestCase
         $buscaMina2->jugar(1,1);
         $this->assertTrue($buscaMina2->terminoDeJugar());
         $this->assertFalse($buscaMina2->gano());
-
-
     }
 
     public function testGano()
@@ -92,12 +90,25 @@ final class CasiBuscaMinaTest extends TestCase
 
     public function testPerdio()
     {
-        
+        $buscaMina = $this->crearBuscaMina();
+        $buscaMina->agregarMina(1,1);
+        $buscaMina->jugar(1,1);
+        $this->assertTrue($buscaMina->terminoDeJugar());
+        $this->assertFalse($buscaMina->gano());
     }
 
     public function testSacarMina()
     {
-        
+        $buscaMina = $this->crearBuscaMina();
+        $buscaMina->agregarMina(1,1);
+        $buscaMina->agregarMina(2,2);
+        $this->assertTrue($buscaMina->sacarMina(1,1));
+        $this->assertFalse($buscaMina->terminoDeJugar());
+        $this->assertFalse($buscaMina->gano());
+        $this->assertFalse($buscaMina->sacarMina(2,1));
+        $this->assertTrue($buscaMina->terminoDeJugar());
+        $this->assertFalse($buscaMina->gano());
+
     }
 
 
