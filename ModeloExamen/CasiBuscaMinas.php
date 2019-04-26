@@ -9,7 +9,7 @@ class BuscaMinas {
 
   public function __construct($ancho, $largo) {
     for($i=0; $i<$ancho; $i++) {
-      for($j=0; $j<$largo; $j) {
+      for($j=0; $j<$largo; $j++) {
         $this->minas[$i][$j] = 0;
       }
     }
