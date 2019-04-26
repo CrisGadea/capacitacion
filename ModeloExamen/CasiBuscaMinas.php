@@ -16,6 +16,12 @@ class BuscaMinas {
   }
 
   public function agregarMina($x, $y) {
+    if (!isset($this->minas[$x][$y])) {
+      return false;
+    }
+    if ($this->minas[$x][$y] < 0) {
+      return false;
+    }
     $this->minas[$x][$y] = -9999;
     $this->cantidadMinas += 1;
 
@@ -43,14 +49,16 @@ class BuscaMinas {
     if (isset($this->minas[$x+1][$y+1])) {
       $this->minas[$x+1][$y+1] += 1;
     }
+    return true;
   }
 
   public function jugar($x, $y) {
-    if ($this->minas[$x][$y]>0) {
-      return $this->minas[$x][$y];
+    if ($this->minas[$x][$y]<0) {
+      $this->perdio = true;
+      $this->termino = true;
+      return false;
     }
-    $this->perdio = true;
-    return false;
+    return $this->minas[$x][$y];
   }
 
   public function terminoDeJugar() {
@@ -62,6 +70,11 @@ class BuscaMinas {
   }
 
   public function sacarMina($x, $y) {
+    if ($this->minas[$x][$y] >= 0) {
+      $this->termino = true;
+      $this->perdio = true;
+      return false;
+    }
     $this->minas[$x][$y] = 0;
     $this->cantidadMinas -= 1;
     if ($this->cantidadMinas == 0) {
@@ -93,5 +106,6 @@ class BuscaMinas {
     if (isset($this->minas[$x+1][$y+1])) {
       $this->minas[$x+1][$y+1] += 1;
     }
+    return true;
   }
 }
