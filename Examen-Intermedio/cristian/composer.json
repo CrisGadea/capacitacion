@@ -1,0 +1,12 @@
+{
+    "name": "crisgadea/cristian",
+    "authors": [
+        {
+            "name": "CrisGadea",
+            "email": "cristianhernangadea@gmail.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^8.1"
+    }
+}

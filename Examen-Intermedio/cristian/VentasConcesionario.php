@@ -22,7 +22,52 @@ $marcas = array('FOR', 'Feat', 'Cachavrolet', 'Jonda', 'Tizan');
 $concesionario = new Concesionaria();
 
 // MODIFICAR ACA
+interface ConcesionariaInterface{
+  public function agregarAutos($idReferencia, $marca, $modelo, $anio, $precio);
+  public function mostrarAutosDeMarca($marca);
+  public function venderAutoMarca($marca);
+  public function totalGanado();
+}
 
+class DecoradorConcesionaria implements ConcesionariaInterface{
+  private $concesionaria;
+  private $ganancia;
+  public function __construct($concesionaria)
+  {
+    $this->concesionaria=$concesionaria;
+    $this->ganancia=0;
+  }
+
+  public function agregarAutos($idReferencia, $marca, $modelo, $anio, $precio){
+    return $this->concesionaria->agregarAutos($idReferencia, $marca, $modelo, $anio, $precio);
+  }
+  public function mostrarAutosDeMarca($marca){
+    return $this->concesionaria->mostrarAutosDeMarca($marca);
+  }
+  public function venderAutoMarca($marca){
+    $antes=0;
+    $result=false;
+    $despues=0;
+
+    if ($marca=='Cachavrolet') {
+      $antes=$this->concesionaria->totalGanado();
+      $result=$this->concesionaria->venderAutoMarca($marca);
+      $despues=$this->concesionaria->totalGanado();
+      $this->ganancia+=$despues - $antes;
+      return $result;
+
+    }
+    return $this->concesionaria->venderAutoMarca($marca);
+  }
+  public function totalGanado(){
+    return $this->concesionaria->totalGanado();
+  }
+
+  public function mostrarGanancias(){
+    return $this->ganancia;
+  }
+
+}
 // HASTA ACA
 
 for($i=0; $i<500; $i++) {
@@ -37,4 +82,7 @@ for($i=0; $i<20; $i++) {
 
 // MODIFICAR ACA
 // ---- imprimir ganancias por Cachavrolet ----
+$decorador = new DecoradorConcesionaria($concesionario);
+$decorador->venderAutoMarca('Cachavrolet');
+echo $decorador->mostrarGanancias();
 // Hasta aca
