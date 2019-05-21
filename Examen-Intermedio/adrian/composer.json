@@ -1,0 +1,13 @@
+{
+    "name": "adrian/dario",
+    "type": "library",
+    "require": {
+        "phpunit/phpunit": "^8.1"
+    },
+    "authors": [
+        {
+            "name": "Adrian Matute",
+            "email": "adrian23269@gmail.com"
+        }
+    ]
+}

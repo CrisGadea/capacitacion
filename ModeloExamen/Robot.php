@@ -32,6 +32,7 @@
  */
 
 class Robot {
+<<<<<<< HEAD
 
   private $cargaDeBateria;
   private $X;
@@ -72,5 +73,56 @@ class Robot {
       return true;
     }
     return false;
+=======
+  // para realizar operaciones con la bateria, vamos a declararla como un atributo de la clase
+  // una vez realizado eso, la igualamos en 0 que es donde va a partir todo
+  // posterior a esto va a tener un sistema de carga en el que podamos agregarle valor a esa bateria
+
+  public $bateria= 0;
+  //la posicion también se iguala a 0, ya que originalmente estaremos quietos
+  public $x= 0;
+  public $y= 0;
+
+  public function cargar() {
+    //cuando instanciemos el metodo "cargar", este va a tomar con "$this", la bateria
+    //que está afuera y declaramos previamente, y a ese 0 que teníamos, lo va a reemplazar por 100
+    //o el número que nosotros querramos,
+    $this->bateria=100;
+  }
+
+  public function bateria() {
+    //Este metodo solo debe mostrar el nivel de batería actual
+    //si ya lo cargamos, será el numero que cargamos, y sino, será 0;
+    return $this->bateria;
+  }
+
+  public function posicionX() {
+    //esta funcion solo muestra la posicion X, así que vamos a necesitar declararla previamente como hicimos con la bateria
+    //una vez realizado esto, deberé retornar la posicion.
+
+    return $this->x;
+  }
+
+  public function posicionY() {
+    return $this->y;
+  }
+
+  public function mover($x, $y) {
+    //mover va a tener que tener una condicion, que especifique que gasta 10 de bateria cada vez que se mueva;
+    //esa condicion va a estar dada por un if
+    //en esta condicion estamos diciendo, que si la bateria, al restarle 10, es menor a 0, retorne falso, porque no se puede realizar el movimiento
+    if ($this->bateria -10 < 0) {
+
+      return false;
+    }
+    //aca estoy diciendo, que voy a tomar este atributo declarado previamente, ya sea x o y, lo voy a guardar en una variable propia de la funcion, en este caso con su mismo nombre
+    //voy a usar si o si 10 de bateria declarada previamente, y si todo se pudo, voy a devolver un true;
+    //porque el robot pudo moverse;
+    $this->x=$x;
+    $this->y=$y;
+    $this->bateria-=10;
+    return true;
+
+>>>>>>> 127226f7d02d7e19ea6696e6513a54d855fac487
   }
 }

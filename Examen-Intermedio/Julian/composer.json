@@ -1,0 +1,13 @@
+{
+    "name": "darmagion/julian",
+    "authors": [
+        {
+            "name": "julian",
+            "email": "insaurraldemicellijulian@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^8"
+    }
+}

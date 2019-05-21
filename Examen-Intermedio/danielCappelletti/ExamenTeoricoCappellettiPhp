@@ -1,0 +1,51 @@
+
+ 
+/EXAMEN DANIEL CAPPELLETTI
+/**
+ * Se les presentan varias preguntas teoricas sobre los temas
+ * vistos durante el curso. Responda con una X entre los [ ] en
+ * las preguntas multiple choices y donde deba desarrollar escriba
+ * dentro los comentarios.
+ */
+ 
+/**
+ * 1 - MongoDB / Elastic search son:
+ *
+ * [ ] - Base de datos relacionales
+ * [X] - Base de datos no relacional
+ * [ ] - Un sistema de documentos
+ */
+ 
+/**
+ * 2 - MongoDB - Marque todas las que corresponda:
+ *
+ * [ ] - Guarda documentos con una estructura rigida de información
+ * [X] - Guarda documentos sin estructura rigida
+ * [X] - Se puede guardar documentos en grupos de documentos o collecciones
+ * [X] - Nos podemos comunicar con MongoDB por medio de JSON
+ */
+ 
+/**
+ * 3 - Patrones de diseño. Explique MVC, de un ejemplo de las actividades donde
+ *     hicimos uso de este patron. Comente los componentes principales
+ *     de la actividad.
+     Es un patron de arquitectura que conciste en tener un MODELO que opera en al base 
+     UNA VISTA que se pocisiona al cliente y un COTROLADOR que modera y trabaja la logica dle negocio.
+     la vista solicita al controlador, el controlador va hacia el modelo y entrega a la vista.
+     Hemos trabajado el caso del framework. en donde los controller verificaban edad full name y otra
+     metodos mediante el pedido por url. Luego un Router que despachaba el controller que le correspondia
+     a cada url.
+    
+
+ */
+ 
+ /**
+  * 4 - Patrones de diseño. De un ejemplo practico de cada uno de Decorator y Composite.
+   El patron Decorator trabaja funcionando como la clase implmentando una interface, pero le agrega una funcion si 
+   modificar le codigo original, en otras palabras se comporta como la clase pero no es la clase original. Estuvimos armando una blletera en pesos
+   que al agregar un decorator, podiamos convertir el valor en dolares sin tocar la clase billetera en pesos.
+
+   el composite se utiliza para construir clases(objetos) a partir de otros mas dificultosos.
+   estuvimos trabajando el cpmposite con la clase caja en donde podiamos ingresar objetos, y en si una misma caja.
+  */
+

@@ -1,0 +1,181 @@
+<?php
+
+class Cola {
+
+  private $_data = array();
+
+  public function encolar($element) {
+    $this->_data[] = $element;
+  }
+
+  public function desencolar() {
+    return array_shift($this->_data);
+  }
+
+  public function estaVacia() {
+    return count($this->_data) == 0;
+  }
+
+}
+
+class Persona {
+  private $nombre;
+  private $dni;
+  public function __construct($nombre, $dni) {
+    $this->nombre = $nombre;
+    $this->dni = $dni;
+  }
+
+  public function dameNombre() { 
+    return $this->nombre; 
+  }
+  public function dameDNI() { return $this->dni; }
+}
+
+class DB {
+  private $db = array();
+
+  public function insert($id, $obj) {
+    $this->db[$id] = $obj;
+  }
+
+  public function delete($id) {
+    unset($this->db[$id]);
+  }
+
+  public function get($id) {
+    return $this->db[$id];
+  }
+
+  public function getAll() {
+    return $this->db;
+  }
+}
+
+class MongoDB
+{
+  private $server;
+  private $db;
+  private $collection;
+
+  public function __construct()
+  {
+    $this->server = new MongoDB\Client("mongodb://172.17.0.3:27017");
+    $this->db = $this->server->selectDatabase("globalhitss");
+    $this->collection = $this->db->getCollection("mongoDB");
+  }
+
+  public function get($id){
+    return $this->collection->findOne(['id'=>$id]);
+  }
+
+  public function getAll(){
+    return $this->collection->find();
+  }
+
+  public function insert($id,$persona){
+    $this->collection->insertOne(
+      [
+        'id'=>$id,
+        'persona'=>$persona
+      ]
+    );
+  }
+
+  public function update($id,$elementos){
+    if ($this->collection->findOne(['id'=>$id])) {
+      $this->collection->findOne(['id'=>$id])->update(
+        [
+          'persona'=>$elementos
+        ]
+      );
+      return true;
+    }
+    return false;
+  }
+
+  public function delete($id){
+    if ($this->collection->findOne(['id'=>$id])) {
+      $this->collection->findOne(['id'=>$id])->deleteOne();
+      return true;
+    }
+    return false;
+  }
+
+}
+
+class Cluster {
+
+  private $dbs = array();
+  private $cola;
+
+  public function __construct($cola) {
+    $this->cola = $cola;
+  }
+
+  public function guardar(Persona $persona) {
+    $a_donde = $persona->dameDNI() % count($this->dbs);
+    $this->dbs[$a_donde]->insert($persona->dameDNI(), $persona);
+  }
+
+  public function borrar(Persona $persona) {
+    $a_donde = $persona->dameDNI() % count($this->dbs);
+    $this->dbs[$a_donde]->delete($persona->dameDNI());
+  }
+
+  public function agregarDB(MongoDB $db) {
+    $this->dbs[] = $db;
+    foreach ($this->dbs as $dbKey => $db) {
+      foreach ($db->getAll() as $keyUsuario => $usuario) {
+        $a_donde = $usuario->dameDNI() % count($this->dbs);
+        if ($a_donde != $dbKey) {
+          $this->cola->encolar($usuario);
+        }
+      }
+    }
+  }
+
+  public function migrar() {
+    while(!$this->cola->estaVacia()) {
+      $usuario = $this->cola->desencolar();
+
+      $viejoLugar = $usuario->dameDNI() % (count($this->dbs)-1);
+      $nuevoLugar = $usuario->dameDNI() % count($this->dbs);
+
+      $this->dbs[$viejoLugar]->delete($usuario->dameDNI());
+      $this->dbs[$nuevoLugar]->insert($usuario->dameDNI(),$usuario);
+    }
+  }
+
+  public function mostarResumen() {
+    foreach ($this->dbs as $dbKey => $db) {
+      echo "DB: $dbKey - Cantidad: ".count($db->getAll())."\n";
+    }
+  }
+}
+
+
+$db = new Cluster(new Cola());
+$db1=new MongoDB;
+$db->agregarDB($db1);
+$db->migrar();
+$db2=new MongoDB;
+$db->agregarDB($db2);
+$db->migrar();
+$db3=new MongoDB;
+$db->agregarDB($db3);
+$db->migrar();
+
+
+$db->guardar(new Persona("Pepe", 32));
+$db->guardar(new Persona("Matias", 10));
+$db->guardar(new Persona("Julian", 9));
+$db->guardar(new Persona("Jose", 44));
+$db->guardar(new Persona("Adrian", 55));
+$db->guardar(new Persona("KP", 60));
+$db->guardar(new Persona("Tomy", 70));
+
+$db4=new MongoDB;
+$db->agregarDB($db4);
+$db->migrar();
+$db->mostarResumen();

@@ -1,0 +1,6 @@
+{
+    "name": "jose/diaz",
+    "require": {
+        "phpunit/phpunit": "^8.1"
+    }
+}
