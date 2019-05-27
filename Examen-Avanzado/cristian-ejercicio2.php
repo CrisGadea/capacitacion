@@ -46,51 +46,46 @@ class CuentaBancaria {
       return $this->db->save($this->dni, array('tipo'=>'fondos', 'total' => $pesos));
     }
 
-    public function crearPlazoFijo($pesos) {
-      // para crearlo necesitamos verificar si tiene fondos
+    public function hayFondos($pesos){
       $fondos = $this->traerTodasLasTransacciones();
       $balance = 0;
-      foreach($fondos as $fondo) {
-        if ($fondo['tipo'] == 'fondos') {
+      foreach($fondos as $fondo) 
+      {
+        if ($fondo['tipo'] == 'fondos') 
+        {
           $balance += $fondo['total'];
         }
       }
 
-      if ($balance < $pesos) {
+      if ($balance < $pesos) 
+      {
         // no tiene plata suficiente para crear el plazo fijo
         return false;
       }
+      return true;
 
-      //si tiene plaza suficiente para crear el plazo fijo
+    }
+    
+
+    public function crearPlazoFijo($pesos) {
+      if ($this->hayFondos($pesos)) {
+        //si tiene plaza suficiente para crear el plazo fijo
       // entonces restamos esa plata y agregamos un plazo fijo
       $this->db->save($this->dni, array('tipo'=>'plazo', 'total' => $pesos));
       //ahora resto los fondos que usamos para el plazo fijo
       $this->db->save($this->dni, array('tipo'=>'fondos', 'total' => (-1) * $pesos));
-
-      return true;
+      }
     }
 
     public function comprarAcciones($accion, $pesos) {
-      // para crearlo necesitamos verificar si tiene fondos
-      $fondos = $this->traerTodasLasTransacciones();
-      $balance = 0;
-      foreach($fondos as $fondo) {
-        if ($fondo['tipo'] == 'fondos') {
-          $balance += $fondo['total'];
-        }
-      }
-
-      if ($balance < $pesos) {
-        // no tiene plata suficiente para crear el plazo fijo
-        return false;
-      }
-
+     
+      if ($this->hayFondos($pesos)) {
       //si tiene plaza suficiente para crear el plazo fijo
       // entonces restamos esa plata y agregamos un plazo fijo
       $this->db->save($this->dni, array('tipo'=>'accion', 'accion' => $accion, 'total' => $pesos));
       //ahora resto los fondos que usamos para el plazo fijo
       $this->db->save($this->dni, array('tipo'=>'fondos', 'total' => (-1) * $pesos));
 
-      return true;
+      }
     }
 }

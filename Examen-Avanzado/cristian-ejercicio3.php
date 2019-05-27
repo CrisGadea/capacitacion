@@ -28,3 +28,7 @@
  * instalar con composer la libreria de rabbitmq y agregar el
  * codigo aqui abajo.
  */
+
+
+Mensaje Enviado: 'Hola, soy Cristian'
+Mensaje Recibido '443b8055478a93aa16224834a0e0f143'

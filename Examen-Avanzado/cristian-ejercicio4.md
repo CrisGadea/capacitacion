@@ -11,8 +11,8 @@ saber los ultimos resultados de cada partido y de cada equipo por lo cual la
 cantidad de visitas a nuestros sitios es de varios millones por hora.
 
 El nivel del torneo se volvio muy bueno por lo cual, no suele haber tantos
-goles porque es extremadamente competitivo así que rara vez necesitamos
-guardar información en las bases de datos.
+goles porque es extremadamente competitivo así que ##rara vez necesitamos
+guardar información en las bases de datos##.
 
 Como estamos ganando tanta plata por las entradas no nos intereso nunca
 vender los derechos de televisación de los partidos por lo cual somos los únicos
@@ -27,4 +27,9 @@ de pensar un esquema de serviciós para las paginas y un esquema de base de dato
 que soporte tantas consultas como son necesarias pero con pocas escrituras.
 
 ## Solución
+En el esquema de base de servicios para las paginas, si utilizamos la configuracion de replicacion Master-Slave, podemos tener un Master donde se hagan las modificaciones y muchos Slaves que se encarguen de mostrar la informacion. Esta configuración se adapta muy bien en este contexto ya que no habrán muchos cambios en los datos para guardar en el master, pero si muchas consultas a la BD.
+
+Tambien tendremos para la BD un load balancer que se encargara de distribuir a cada consulta un determinado slave para no sobrecargar a una misma base de datos con muchas consultas simultaneas y, al tener una alta disponibilidad de servidores, podra mandar la consulta a alguna BD menos cargada.
+
+
 

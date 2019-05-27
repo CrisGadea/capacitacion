@@ -1,13 +1,12 @@
 {
-    "name": "crisgadea/capacitacion",
+    "name": "crisgadea/examen-avanzado",
     "authors": [
         {
-            "name": "CrisGadea",
+            "name": "Cristian",
             "email": "cristianhernangadea@gmail.com"
         }
     ],
     "require": {
-        "phpunit/phpunit": "^8.1",
         "php-amqplib/php-amqplib": "^2.9"
     }
 }
