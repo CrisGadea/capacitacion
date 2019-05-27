@@ -33,13 +33,14 @@ class Persona {
 }
 
 class DB {
-  private $db = array();
+  private $data = array();
 
   public function insert($id, $obj) {
-    $this->db[$id] = $obj;
+    $this->data[$id] = $obj;
   }
 
   public function delete($id) {
+<<<<<<< HEAD
     unset($this->db[$id]);
   }
 
@@ -92,6 +93,17 @@ class MongoDB
       return true;
     }
     return false;
+=======
+    // borrar la key $id de data
+  }
+
+  public function get($id) {
+    // devolver data[$id]
+  }
+
+  public function getAll() {
+    // devolver data
+>>>>>>> b8efdd22469202a37844e6dc5eeef8fdf05398b5
   }
 
   public function delete($id){
@@ -115,15 +127,30 @@ class Cluster {
 
   public function guardar(Persona $persona) {
     $a_donde = $persona->dameDNI() % count($this->dbs);
+<<<<<<< HEAD
     $this->dbs[$a_donde]->insert($persona->dameDNI(), $persona);
+=======
+    $this->dbs[$a_donde][$persona->dameDNI()] = $persona;
+    // no va mas con arreglos, ahora son DB
+    // dbs[donde]->insert(id, usuario)
+>>>>>>> b8efdd22469202a37844e6dc5eeef8fdf05398b5
   }
 
   public function borrar(Persona $persona) {
     $a_donde = $persona->dameDNI() % count($this->dbs);
+<<<<<<< HEAD
     $this->dbs[$a_donde]->delete($persona->dameDNI());
   }
 
   public function agregarDB(MongoDB $db) {
+=======
+    unset($this->dbs[$a_donde][$persona->dameDNI()]);
+    // aca no va mas el unset deberia ser
+    // dbs[donde]->delete( id )
+  }
+
+  public function agregarDB(DB $db) {
+>>>>>>> b8efdd22469202a37844e6dc5eeef8fdf05398b5
     $this->dbs[] = $db;
     foreach ($this->dbs as $dbKey => $db) {
       foreach ($db->getAll() as $keyUsuario => $usuario) {
@@ -139,22 +166,37 @@ class Cluster {
     while(!$this->cola->estaVacia()) {
       $usuario = $this->cola->desencolar();
 
+      // estas cuentas quedan igual que antes
       $viejoLugar = $usuario->dameDNI() % (count($this->dbs)-1);
       $nuevoLugar = $usuario->dameDNI() % count($this->dbs);
 
+<<<<<<< HEAD
       $this->dbs[$viejoLugar]->delete($usuario->dameDNI());
       $this->dbs[$nuevoLugar]->insert($usuario->dameDNI(),$usuario);
+=======
+      // esto ya no van, deberian ser
+      // db->delete
+      // db->insert
+      unset($this->dbs[$viejoLugar][$usuario->dameDNI()]);
+      $this->dbs[$nuevoLugar][$usuario->dameDNI()] = $usuario;
+>>>>>>> b8efdd22469202a37844e6dc5eeef8fdf05398b5
     }
   }
 
   public function mostarResumen() {
     foreach ($this->dbs as $dbKey => $db) {
+<<<<<<< HEAD
       echo "DB: $dbKey - Cantidad: ".count($db->getAll())."\n";
+=======
+      echo "DB: $dbKey - Cantidad: ".count($db)."\n";
+      //echo "DB: $dbKey - Cantidad: ".count($db->getall())."\n";
+>>>>>>> b8efdd22469202a37844e6dc5eeef8fdf05398b5
     }
   }
 }
 
 
+<<<<<<< HEAD
 $db = new Cluster(new Cola());
 $db1=new MongoDB;
 $db->agregarDB($db1);
@@ -179,3 +221,22 @@ $db4=new MongoDB;
 $db->agregarDB($db4);
 $db->migrar();
 $db->mostarResumen();
+=======
+$cluster = new Cluster(3, new Cola());
+
+$db = new DB();
+$cluster->agregarDB($db);
+$cluster->migrar();
+
+// no se olviden de agregar DBS antes de agregar personas,
+// si agregan 3 dbs deberia antdar como antes
+$cluster->guardar(new Persona("Pepe", 32));
+$cluster->guardar(new Persona("Matias", 10));
+$cluster->guardar(new Persona("Julian", 9));
+$cluster->guardar(new Persona("Jose", 44));
+$cluster->guardar(new Persona("Adrian", 55));
+$cluster->guardar(new Persona("KP", 60));
+$cluster->guardar(new Persona("Tomy", 70));
+
+$cluster->mostarResumen();
+>>>>>>> b8efdd22469202a37844e6dc5eeef8fdf05398b5
